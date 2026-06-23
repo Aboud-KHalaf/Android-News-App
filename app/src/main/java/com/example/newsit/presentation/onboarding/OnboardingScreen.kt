@@ -1,6 +1,6 @@
 package com.example.newsit.presentation.onboarding
 
-import androidx.compose.animation.core.animateColorAsState
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -69,8 +69,7 @@ fun OnboardingScreen(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth(),
-            userScrollEnabled = true,
-            beyondBoundsPageCount = 0
+            userScrollEnabled = true
         ) { page ->
             OnboardingPageContent(
                 pageData = state.pages[page],
