@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="App.Starting.Theme" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">#FFFF</item>
+        <item name="windowSplashScreenBackground">@color/splash_light_background</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
         <item name="postSplashScreenTheme">@style/Theme.NewsIt</item>
     </style>
