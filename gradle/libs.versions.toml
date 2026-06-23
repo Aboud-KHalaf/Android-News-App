@@ -9,7 +9,7 @@ lifecycleRuntimeKtx = "2.10.0"
 activityCompose = "1.13.0"
 composeBom = "2024.09.00"
 
-#navigation = "2.9.3"
+navigation = "2.9.3"
 #hilt = "2.57"
 #hiltNavigationCompose = "1.2.0"
 #retrofit = "3.0.0"
@@ -40,7 +40,7 @@ androidx-compose-material3 = { group = "androidx.compose.material3", name = "mat
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashscreen" }
 
 # Navigation
-#androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 
 # Hilt
 #hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }

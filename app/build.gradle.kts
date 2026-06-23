@@ -67,7 +67,7 @@ dependencies {
 
 // Navigation Compose
 // Handles navigation between Compose screens.
-    //implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.navigation.compose)
 
 // Hilt Dependency Injection
 // Creates and provides app dependencies automatically.
