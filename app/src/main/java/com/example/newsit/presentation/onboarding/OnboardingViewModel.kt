@@ -1,16 +1,16 @@
 package com.example.newsit.presentation.onboarding
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.newsit.data.onboarding.OnboardingRepositoryImpl
 import com.example.newsit.domain.onboarding.model.OnboardingPage
 import com.example.newsit.domain.onboarding.usecase.GetOnboardingPagesUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 data class OnboardingUiState(
     val pages: List<OnboardingPage> = emptyList(),
@@ -21,7 +21,8 @@ data class OnboardingUiState(
     val progress: Float get() = if (pages.isEmpty()) 0f else (currentPage + 1).toFloat() / pages.size
 }
 
-class OnboardingViewModel(
+@HiltViewModel
+class OnboardingViewModel @Inject constructor(
     private val getOnboardingPagesUseCase: GetOnboardingPagesUseCase
 ) : ViewModel() {
 
@@ -39,34 +40,7 @@ class OnboardingViewModel(
         }
     }
 
-    fun onNextPage() {
-        _state.update { state ->
-            if (state.currentPage < state.pages.size - 1) {
-                state.copy(currentPage = state.currentPage + 1)
-            } else state
-        }
-    }
-
-    fun onPreviousPage() {
-        _state.update { state ->
-            if (state.currentPage > 0) {
-                state.copy(currentPage = state.currentPage - 1)
-            } else state
-        }
-    }
-
     fun onPageSelected(page: Int) {
         _state.update { it.copy(currentPage = page.coerceIn(0, it.pages.size - 1)) }
-    }
-
-    companion object {
-        val factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                val repository = OnboardingRepositoryImpl()
-                val useCase = GetOnboardingPagesUseCase(repository)
-                return OnboardingViewModel(useCase) as T
-            }
-        }
     }
 }

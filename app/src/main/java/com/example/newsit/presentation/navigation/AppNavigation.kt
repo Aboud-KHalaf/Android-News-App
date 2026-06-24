@@ -16,11 +16,13 @@ fun AppNavigation() {
     ) {
         composable("onboarding") {
             OnboardingScreen(
+
                 onComplete = {
                     navController.navigate("home") {
                         popUpTo("onboarding") { inclusive = true }
                     }
                 }
+
             )
         }
 

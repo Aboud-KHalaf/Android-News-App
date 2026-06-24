@@ -7,8 +7,9 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Star
 import com.example.newsit.domain.onboarding.model.OnboardingPage
 import com.example.newsit.domain.onboarding.repository.OnboardingRepository
+import javax.inject.Inject
 
-class OnboardingRepositoryImpl : OnboardingRepository {
+class OnboardingRepositoryImpl @Inject constructor() : OnboardingRepository {
     override suspend fun getOnboardingPages(): List<OnboardingPage> {
         return listOf(
             OnboardingPage(

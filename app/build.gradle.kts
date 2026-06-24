@@ -3,8 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 
-   // alias(libs.plugins.ksp)
-   // alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -72,11 +72,11 @@ dependencies {
 
 // Hilt Dependency Injection
 // Creates and provides app dependencies automatically.
-    //implementation(libs.hilt.android)
-   // ksp(libs.hilt.compiler)
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
 
 // Allows Hilt to work with Navigation Compose.
-    //implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.hilt.navigation.compose)
 
 // Retrofit
 // Performs HTTP requests and communicates with REST APIs.
