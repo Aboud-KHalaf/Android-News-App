@@ -21,24 +21,27 @@ Keeping the domain layer independent means:
 ## Folder Structure
 ```
 com.example.newsit/
+├── NewsItApplication.kt                 # @HiltAndroidApp entry point
+├── di/
+│   └── RepositoryModule.kt              # Hilt bindings (interface → impl)
 ├── data/
 │   └── onboarding/
-│       └── OnboardingRepositoryImpl.kt    # Mock implementation
+│       └── OnboardingRepositoryImpl.kt  # Mock implementation
 ├── domain/
 │   └── onboarding/
 │       ├── model/
-│       │   └── OnboardingPage.kt          # Data class (title, desc, icon)
+│       │   └── OnboardingPage.kt        # Data class (title, desc, icon)
 │       ├── repository/
-│       │   └── OnboardingRepository.kt    # Interface contract
+│       │   └── OnboardingRepository.kt  # Interface contract
 │       └── usecase/
 │           └── GetOnboardingPagesUseCase.kt
 └── presentation/
     ├── navigation/
-    │   ├── AppNavigation.kt              # NavHost with routes
-    │   └── HomePlaceholder.kt            # Temporary home screen
+    │   ├── AppNavigation.kt             # NavHost with routes
+    │   └── HomePlaceholder.kt           # Temporary home screen
     └── onboarding/
-        ├── OnboardingViewModel.kt        # State management
-        └── OnboardingScreen.kt           # Compose UI
+        ├── OnboardingViewModel.kt       # @HiltViewModel state management
+        └── OnboardingScreen.kt          # Compose UI
 ```
 
 ## State Management Choice
@@ -55,6 +58,9 @@ Alternatives considered:
 - Simple `update {}` for atomic state mutations.
 - Straightforward testing via `viewModel.state.test {}`.
 
+### Lifecycle-Aware Collection
+State is collected with `collectAsStateWithLifecycle()` (from `lifecycle-runtime-compose`) instead of `collectAsState()`. This ensures the flow subscription is paused when the app goes to the background, saving resources and preventing unnecessary recompositions.
+
 ## Navigation Approach
 
 **Chosen: Jetpack Navigation Compose (`NavHost` + `composable()` routes)**
@@ -67,25 +73,35 @@ AppNavigation
 └── "home"       → HomePlaceholder (future: news feed)
 ```
 
-Inside the onboarding screen, `HorizontalPager` handles swipe between the 4 pages, while Next/Back/Skip buttons provide alternative navigation. The ViewModel tracks the current page index; the Pager's scroll position is synced via `rememberCoroutineScope`.
+Inside the onboarding screen, `HorizontalPager` handles swipe between the 4 pages (`userScrollEnabled = true`), while Next/Back/Skip buttons provide alternative navigation. A `LaunchedEffect(pagerState.currentPage)` syncs the pager's scroll position back to the ViewModel whenever the user swipes — this prevents the PageIndicator and buttons from going out of sync with the visible page.
+
+Button-based navigation (Next/Back/Skip) animates the pager via `animateScrollToPage()`, which also triggers the same `LaunchedEffect`, keeping a single source of truth for the current page.
 
 ## Why This Design Is Scalable
 
-### 1. Repository Pattern
+### 1. Dependency Injection (Hilt)
+The project uses **Hilt** for dependency injection with KSP annotation processing. The `OnboardingViewModel` is annotated with `@HiltViewModel` and receives its use case via `@Inject constructor`. A `RepositoryModule` in `di/` binds `OnboardingRepository` to `OnboardingRepositoryImpl`, keeping the presentation layer decoupled from the data layer.
+
+Three key Hilt components:
+- `NewsItApplication` (`@HiltAndroidApp`) — application-level DI container
+- `MainActivity` (`@AndroidEntryPoint`) — activity-level injection
+- `OnboardingViewModel` (`@HiltViewModel`) — scoped ViewModel with injected use case
+
+### 2. Repository Pattern
 The `OnboardingRepository` interface in domain is implemented by `OnboardingRepositoryImpl` in data. To connect real data:
-- Swap the implementation in DI (Hilt/Koin).
+- Swap the implementation inside `RepositoryModule` (no changes to ViewModel or UI).
 - The ViewModel and UI never change.
 
-### 2. Stateless UI
+### 3. Stateless UI
 All UI state derives from `OnboardingUiState` exposed by the ViewModel. Screens are pure functions of state — no business logic leaks into composables.
 
-### 3. Feature Isolation
+### 4. Feature Isolation
 The entire onboarding module lives under `onboarding/` packages. Adding a new feature (e.g., `auth/`, `home/`, `search/`) follows the same structure without risk of collisions.
 
-### 4. Navigation Extensibility
+### 5. Navigation Extensibility
 Routes are centralized in `AppNavigation.kt`. Adding a new screen is a single `composable("route") { ... }` block. The `onComplete` callback pattern means screens don't need to know about the navigation graph.
 
-### 5. Testability
+### 6. Testability
 - ViewModel: inject mock use case → verify state flow.
 - UI: snapshot/preview composables with sample state.
 - Use cases: pure Kotlin → fast unit tests.
