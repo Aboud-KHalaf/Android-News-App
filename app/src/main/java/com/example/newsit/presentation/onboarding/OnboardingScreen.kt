@@ -23,7 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -32,20 +32,25 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 
 @Composable
 fun OnboardingScreen(
     onComplete: () -> Unit,
-    viewModel: OnboardingViewModel = viewModel(factory = OnboardingViewModel.factory)
+    viewModel: OnboardingViewModel = hiltViewModel()
 ) {
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
     val pagerState = rememberPagerState(
         initialPage = 0,
         pageCount = { state.pages.size }
     )
     val scope = rememberCoroutineScope()
+
+    LaunchedEffect(pagerState.currentPage) {
+        viewModel.onPageSelected(pagerState.currentPage)
+    }
 
     Column(
         modifier = Modifier
@@ -59,7 +64,6 @@ fun OnboardingScreen(
             onClick = {
                 scope.launch {
                     pagerState.animateScrollToPage(state.pages.size - 1)
-                    viewModel.onPageSelected(state.pages.size - 1)
                 }
             }
         )
@@ -89,13 +93,11 @@ fun OnboardingScreen(
                 scope.launch {
                     pagerState.animateScrollToPage(state.currentPage + 1)
                 }
-                viewModel.onNextPage()
             },
             onPrevious = {
                 scope.launch {
                     pagerState.animateScrollToPage(state.currentPage - 1)
                 }
-                viewModel.onPreviousPage()
             },
             onComplete = onComplete,
             modifier = Modifier.padding(horizontal = 24.dp, vertical = 32.dp)
