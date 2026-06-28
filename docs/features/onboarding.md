@@ -41,7 +41,10 @@ com.example.newsit/
     │   └── HomePlaceholder.kt           # Temporary home screen
     └── onboarding/
         ├── OnboardingViewModel.kt       # @HiltViewModel state management
-        └── OnboardingScreen.kt          # Compose UI
+        ├── OnboardingScreen.kt          # Compose UI with pager + buttons
+        ├── BottomButtons.kt             # Reusable button component
+        ├── PageIndicator.kt             # Page dot indicator
+        └── OnboardingPageContent.kt     # Individual page content
 ```
 
 ## State Management Choice
