@@ -3,8 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 
-   // alias(libs.plugins.ksp)
-   // alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -42,11 +42,15 @@ android {
     buildFeatures {
         compose = true
     }
+    hilt {
+        enableAggregatingTask = false
+    }
 }
 
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
@@ -61,21 +65,23 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
+
+
     // Splash Screen API
 // Displays a splash screen while the app is loading.
     implementation(libs.androidx.core.splashscreen)
 
 // Navigation Compose
 // Handles navigation between Compose screens.
-    //implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.navigation.compose)
 
 // Hilt Dependency Injection
 // Creates and provides app dependencies automatically.
-    //implementation(libs.hilt.android)
-   // ksp(libs.hilt.compiler)
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
 
 // Allows Hilt to work with Navigation Compose.
-    //implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.hilt.navigation.compose)
 
 // Retrofit
 // Performs HTTP requests and communicates with REST APIs.
