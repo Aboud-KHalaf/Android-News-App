@@ -1,7 +1,12 @@
 # Onboarding Feature
 
 ## Overview
-A 4-screen onboarding flow that introduces new users to the NewsIt app. Built with Jetpack Compose following Clean Architecture + MVVM.
+A 4-screen onboarding flow that introduces new users to the NewsIt app. Built with Jetpack Compose following Clean Architecture + MVVM. Now includes local storage persistence to remember user completion state and skip the flow on subsequent app launches.
+
+## Key Features
+- Local storage persistence to show onboarding only once per device
+- Continue from last page when returning to the app
+- Skip entire onboarding flow when already completed
 
 ## Architecture Decisions
 
@@ -9,10 +14,10 @@ A 4-screen onboarding flow that introduces new users to the NewsIt app. Built wi
 The feature is split across three layers to enforce separation of concerns:
 
 - **`domain/`** — Contains business logic only (models, repository interfaces, use cases). No Android framework dependencies.
-- **`data/`** — Implements the repository contract. Currently uses mock data; can be swapped with a real backend/data source without touching other layers.
+- **`data/`** — Implements the repository contract. Uses SharedPreferences to persist onboarding completion state.
 - **`presentation/`** — Jetpack Compose UI + ViewModel. Follows MVVM with StateFlow-based state management.
 
-### Why not single-layer?
+### Why Single Layer?
 Keeping the domain layer independent means:
 - Use cases and models can be unit-tested without Android instrumentation.
 - The repository interface allows swapping data sources (mock -> API -> cache) via DI without changing the ViewModel or UI.
@@ -34,7 +39,8 @@ com.example.newsit/
 │       ├── repository/
 │       │   └── OnboardingRepository.kt  # Interface contract
 │       └── usecase/
-│           └── GetOnboardingPagesUseCase.kt
+│           ├── GetOnboardingPagesUseCase.kt
+│           └── CheckOnboardingCompletionUseCase.kt
 └── presentation/
     ├── navigation/
     │   ├── AppNavigation.kt             # NavHost with routes
