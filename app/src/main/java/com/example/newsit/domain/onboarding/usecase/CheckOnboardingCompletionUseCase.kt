@@ -6,5 +6,5 @@ import javax.inject.Inject
 class CheckOnboardingCompletionUseCase @Inject constructor(
     private val repository: OnboardingRepository
 ) {
-    fun invoke(): kotlinx.coroutines.flow.Flow<Boolean> = repository.isOnboardingCompleted()
+    operator fun invoke(): kotlinx.coroutines.flow.Flow<Boolean> = repository.isOnboardingCompleted()
 }
