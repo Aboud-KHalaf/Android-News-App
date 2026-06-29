@@ -1,5 +1,6 @@
 package com.example.newsit.data.onboarding
 
+import android.content.Context
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Info
@@ -7,9 +8,12 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Star
 import com.example.newsit.domain.onboarding.model.OnboardingPage
 import com.example.newsit.domain.onboarding.repository.OnboardingRepository
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-class OnboardingRepositoryImpl @Inject constructor() : OnboardingRepository {
+class OnboardingRepositoryImpl @Inject constructor(
+    @ApplicationContext private val context: Context
+) : OnboardingRepository {
     override suspend fun getOnboardingPages(): List<OnboardingPage> {
         return listOf(
             OnboardingPage(
@@ -33,5 +37,27 @@ class OnboardingRepositoryImpl @Inject constructor() : OnboardingRepository {
                 icon = Icons.Filled.Check
             )
         )
+    }
+
+    override fun setOnboardingCompleted(completed: Boolean) {
+        context.getSharedPreferences("NewsItPrefs", Context.MODE_PRIVATE)
+            .edit()
+            .putBoolean("onboardingCompleted", completed)
+            .apply()
+    }
+
+    override fun isOnboardingCompleted(): kotlinx.coroutines.flow.Flow<Boolean> {
+        val sharedPrefs = context.getSharedPreferences("NewsItPrefs", Context.MODE_PRIVATE)
+        val initialValue = sharedPrefs.getBoolean("onboardingCompleted", false)
+        return kotlinx.coroutines.flow.callbackFlow {
+            val listener = android.content.SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+                if (key == "onboardingCompleted") {
+                    send(sharedPrefs.getBoolean(key, false))
+                }
+            }
+            sharedPrefs.registerOnSharedPreferenceChangeListener(listener)
+            trySend(initialValue)
+            awaitClose { sharedPrefs.unregisterOnSharedPreferenceChangeListener(listener) }
+        }
     }
 }

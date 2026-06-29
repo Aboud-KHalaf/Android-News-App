@@ -32,6 +32,13 @@ fun OnboardingScreen(
     viewModel: OnboardingViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    
+    // If onboarding has already been completed, skip the onboarding flow
+    if (!state.shouldShowOnboarding) {
+        onComplete()
+        return
+    }
+
     val pagerState = rememberPagerState(
         initialPage = 0,
         pageCount = { state.pages.size }
