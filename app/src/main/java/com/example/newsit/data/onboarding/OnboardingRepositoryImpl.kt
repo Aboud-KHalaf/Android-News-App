@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.Star
 import com.example.newsit.domain.onboarding.model.OnboardingPage
 import com.example.newsit.domain.onboarding.repository.OnboardingRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.channels.awaitClose
 import javax.inject.Inject
 
 class OnboardingRepositoryImpl @Inject constructor(
@@ -52,7 +53,7 @@ class OnboardingRepositoryImpl @Inject constructor(
         return kotlinx.coroutines.flow.callbackFlow {
             val listener = android.content.SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
                 if (key == "onboardingCompleted") {
-                    send(sharedPrefs.getBoolean(key, false))
+                    trySend(sharedPrefs.getBoolean(key, false))
                 }
             }
             sharedPrefs.registerOnSharedPreferenceChangeListener(listener)
