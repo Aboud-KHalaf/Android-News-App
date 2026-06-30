@@ -31,8 +31,11 @@ fun OnboardingScreen(
     onComplete: () -> Unit,
     viewModel: OnboardingViewModel = hiltViewModel()
 ) {
+
+    // by : Property Delegation
+    // we can use = but then we need to access value to access the right one like text.value.somthing
     val state by viewModel.state.collectAsStateWithLifecycle()
-    
+
     // If onboarding has already been completed, skip the onboarding flow
     if (!state.shouldShowOnboarding) {
         onComplete()
