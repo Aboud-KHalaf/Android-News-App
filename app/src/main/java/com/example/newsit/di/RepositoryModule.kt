@@ -1,6 +1,8 @@
 package com.example.newsit.di
 
+import com.example.newsit.data.home.repository.ArticleRepositoryImpl
 import com.example.newsit.data.onboarding.OnboardingRepositoryImpl
+import com.example.newsit.domain.home.repository.ArticleRepository
 import com.example.newsit.domain.onboarding.repository.OnboardingRepository
 import dagger.Binds
 import dagger.Module
@@ -15,4 +17,9 @@ abstract class RepositoryModule {
     abstract fun bindOnboardingRepository(
         impl: OnboardingRepositoryImpl
     ): OnboardingRepository
+
+    @Binds
+    abstract fun bindArticleRepository(
+        impl: ArticleRepositoryImpl
+    ): ArticleRepository
 }
