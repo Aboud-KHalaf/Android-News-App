@@ -12,8 +12,9 @@ composeBom = "2024.09.00"
 navigation = "2.9.3"
 hilt = "2.57"
 hiltNavigationCompose = "1.2.0"
-#retrofit = "3.0.0"
-#coil = "3.3.0"
+retrofit = "3.0.0"
+okhttp = "4.12.0"
+coil = "3.3.0"
 #datastore = "1.1.7"
 #paging = "3.3.6"
 #room = "2.8.0"
@@ -50,11 +51,15 @@ hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.r
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 
 # Retrofit
-#retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
-#retrofit-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
+
+# OkHttp
+okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 
 # Coil
-#coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
+coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
+coil-network-okhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil" }
 
 # Datastore
 #androidx-datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }

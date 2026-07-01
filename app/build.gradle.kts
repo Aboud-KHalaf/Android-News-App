@@ -86,15 +86,20 @@ dependencies {
 
 // Retrofit
 // Performs HTTP requests and communicates with REST APIs.
-    //implementation(libs.retrofit)
+    implementation(libs.retrofit)
 
 // Gson Converter
 // Converts JSON responses into Kotlin objects.
-   // implementation(libs.retrofit.gson)
+    implementation(libs.retrofit.gson)
+
+// OkHttp Logging Interceptor
+// Logs HTTP request and response details.
+    implementation(libs.okhttp.logging)
 
 // Coil
 // Loads and displays images from URLs in Compose.
-    //implementation(libs.coil.compose)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
 
 // DataStore
 // Stores small pieces of persistent data such as settings and preferences.
