@@ -14,7 +14,7 @@ hilt = "2.57"
 hiltNavigationCompose = "1.2.0"
 retrofit = "3.0.0"
 okhttp = "4.12.0"
-coil = "3.3.0"
+coil = "2.7.0"
 #datastore = "1.1.7"
 #paging = "3.3.6"
 #room = "2.8.0"
@@ -58,8 +58,7 @@ retrofit-gson = { group = "com.squareup.retrofit2", name = "converter-gson", ver
 okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 
 # Coil
-coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
-coil-network-okhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil" }
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 
 # Datastore
 #androidx-datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
